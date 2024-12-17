@@ -1,1 +1,10 @@
-<p>calendar works!</p>
+<div class="calendar-container">
+  <div *ngFor="let day of dayName" class="calendar-head">
+    {{day}}
+  </div>
+  <div *ngFor="let i of days" class="calendar-column">cell - {{i}}</div>
+  <!-- <div class="calendar-column">calendar column 2</div>
+  <div class="calendar-column">calendar column 3</div>
+  <div class="calendar-column">calendar column 4</div>
+  <div class="calendar-column">calendar column 5</div> -->
+</div>

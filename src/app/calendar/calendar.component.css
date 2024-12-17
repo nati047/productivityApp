@@ -1,0 +1,21 @@
+.calendar-container {
+  display: grid;
+  gap: 2px;
+  grid-template-columns: auto auto auto auto auto auto auto;
+  /* grid-template-rows: 10% auto; */
+  margin: 20px 0px 0px 100px;
+  width: 80vw;
+  height: 80vh;
+  /* border: 1px solid salmon; */
+}
+
+.calendar-head {
+  text-align: center;
+  border: 1px solid rgb(245, 2, 2);
+}
+
+.calendar-column {
+  text-align: center;
+  border: 1px solid black;
+}
+

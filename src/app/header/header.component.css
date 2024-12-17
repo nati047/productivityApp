@@ -8,3 +8,7 @@
   /* border: 1px solid black; */
   align-items: center;
 }
+.activebutton {
+  font-size: larger;
+  color: red;
+}
