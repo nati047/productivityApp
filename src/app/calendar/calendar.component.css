@@ -1,21 +1,45 @@
 .calendar-container {
-  display: grid;
-  gap: 2px;
-  grid-template-columns: auto auto auto auto auto auto auto;
-  /* grid-template-rows: 10% auto; */
-  margin: 20px 0px 0px 100px;
   width: 80vw;
   height: 80vh;
-  /* border: 1px solid salmon; */
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(7, auto);
+  grid-template-rows: 50px repeat(5, auto);
+  margin: 20px 0px 0px 100px;
+  border: 3px solid salmon;
 }
 
 .calendar-head {
   text-align: center;
   border: 1px solid rgb(245, 2, 2);
+  box-shadow: 1px 1px 3px gray ;
 }
 
 .calendar-column {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* text-align: center; */
   border: 1px solid black;
+  box-shadow: 1px 1px 3px gray ;
+}
+h3 {
+  margin: none;
 }
 
+.calendar-controls {
+  /* border: 1px solid orangered; */
+  margin: 0px 0px 0px 100px;
+  width: 80vw;
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  width: 100px;
+  height: fit-content;
+  padding: 10px;
+}
