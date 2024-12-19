@@ -4,16 +4,13 @@
   <button (click)="toNextMonth()">Next</button>
 </div>
 <div class="calendar-container">
-  <div *ngFor="let day of getDayNames()" class="calendar-head">
-    {{day}}
+  <div *ngFor="let dayName of getDayNames()" class="calendar-head">
+    {{dayName}}
   </div>
-  <div *ngFor="let i of days" class="calendar-column">
-    <h3>
-      {{i > 0 ? i : '*'}}
-    </h3>
-
-  <!-- <div class="calendar-column">calendar column 2</div>
-  <div class="calendar-column">calendar column 3</div>
-  <div class="calendar-column">calendar column 4</div>
-  <div class="calendar-column">calendar column 5</div> -->
+  <div *ngFor="let day of days" class="calendar-column">
+    <div class="date">
+      {{day > 0 ? day : '*'}}
+    </div>
+    <div class="activity">{{getDataOfDay(day)}}</div>
+  </div>
 </div>

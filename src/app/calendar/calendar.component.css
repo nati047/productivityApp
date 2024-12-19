@@ -12,19 +12,37 @@
 .calendar-head {
   text-align: center;
   border: 1px solid rgb(245, 2, 2);
-  box-shadow: 1px 1px 3px gray ;
+  box-shadow: 3px 3px 3px rgb(232, 147, 147) ;
+
 }
 
 .calendar-column {
   display: flex;
+  flex-direction: column;
+  height: 100%;
   align-items: center;
   justify-content: center;
   /* text-align: center; */
-  border: 1px solid black;
-  box-shadow: 1px 1px 3px gray ;
+  /* border: 1px solid black; */
+  box-shadow: 3px 3px 3px gray ;
+  position: relative;
 }
-h3 {
-  margin: none;
+
+.date {
+  /* align-self: flex-start; */
+  color: grey;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.activity {
+  align-self: center;
+  font-weight: 900;
+  font-size: 20px;
+  /* position: absolute;
+  top: 40%;
+  left: 40%; */
 }
 
 .calendar-controls {
@@ -43,3 +61,5 @@ button {
   height: fit-content;
   padding: 10px;
 }
+
+
