@@ -1,7 +1,7 @@
 .header {
   width: 100vw;
   display: flex;
-  height: 75px;
+  height: 10vh;
   flex-direction: row;
   justify-content: space-around;
   box-shadow: 0px 2px 10px rgb(176, 178, 172);

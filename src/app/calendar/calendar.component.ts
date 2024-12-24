@@ -1,6 +1,7 @@
 import { Component, SimpleChange, SimpleChanges } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
-interface DataObject {
+type DataObject  = {
     year: number,
     month: number,
     day: number,
@@ -18,11 +19,12 @@ export class CalendarComponent {
   days!: number[] ;
   month: number = this.currentDate.getMonth();
   year: number = this.currentDate.getFullYear();
+  filter : string = 'all';
   data: DataObject[] = [
     {
       year: 2025,
       month: 1,
-      day: 23,
+      day: 20,
       activity: "gym",
     },
     {
@@ -35,7 +37,7 @@ export class CalendarComponent {
       year: 2025,
       month: 1,
       day: 2,
-      activity: "gym",
+      activity: "code",
     },
     {
       year: 2025,
@@ -64,10 +66,30 @@ export class CalendarComponent {
     {
       year: 2025,
       month: 1,
+      day: 23,
+      activity: "book"
+    },
+    {
+      year: 2025,
+      month: 1,
       day: 28,
-      activity: "gym"
+      activity: "code"
+    },
+    {
+      year: 2025,
+      month: 1,
+      day: 17,
+      activity: "code"
+    },
+    {
+      year: 2025,
+      month: 1,
+      day: 6,
+      activity: "book"
     },
   ];
+
+  filteredData: DataObject[] = [];
 
   constructor() {
     this.days = this.fillDays();
@@ -75,6 +97,11 @@ export class CalendarComponent {
 
   ngOnInit() {
     console.info(this.currentDate);
+    this.applyFilter();
+  }
+
+  ngOnChnage() {
+    alert("chnage detected");
   }
 
   getDayNames() {
@@ -128,9 +155,21 @@ export class CalendarComponent {
     let monthString: string = this.getMonthName(this.month);
 
     // console.log(`monthString ${monthString} - type ${typeof(monthString)}`)
-    let dayData = this.data?.find( val => val.year === this.year && val.month === this.month && val.day === day )
+    let dayData = this.filteredData?.find( val => val.year === this.year && val.month === this.month && val.day === day )
     console.log(dayData);
     return dayData?.activity || "";
-
   }
+
+  applyFilter() {
+    if (this.filter === 'all')
+      this.filteredData = this.data;
+    else
+      this.filteredData = this.data.filter( val => val.activity === this.filter);
+  }
+
+  changeFilter(filter: string) {
+    this.filter = filter;
+    this.applyFilter();
+  }
+
 }

@@ -1,16 +1,24 @@
-<div class="calendar-controls">
-  <button (click)="toPreviousMonth()">Back</button>
-  <h2 style="margin-left: 100px;">{{getMonthName(month)}}, {{year}}</h2>
-  <button (click)="toNextMonth()">Next</button>
-</div>
-<div class="calendar-container">
-  <div *ngFor="let dayName of getDayNames()" class="calendar-head">
-    {{dayName}}
+<div class="cal-component">
+  <div class="calendar-controls">
+    <button (click)="toPreviousMonth()">Back</button>
+    <h2 style="margin-left: 100px;">{{getMonthName(month)}}, {{year}}</h2>
+    <button (click)="toNextMonth()">Next</button>
   </div>
-  <div *ngFor="let day of days" class="calendar-column">
-    <div class="date">
-      {{day > 0 ? day : '*'}}
+  <div class="calendar-container">
+    <div *ngFor="let dayName of getDayNames()" class="calendar-head">
+      {{dayName}}
     </div>
-    <div class="activity">{{getDataOfDay(day)}}</div>
+    <div *ngFor="let day of days" class="calendar-cell">
+      <div class="date">
+        {{day > 0 ? day : '*'}}
+      </div>
+      <div class="activity">{{getDataOfDay(day)}}</div>
+    </div>
+  </div>
+  <div class="action-filter">
+    <button [ngClass]="filter === 'all' ? 'active' : '' " (click)="changeFilter('all')" >All</button>
+    <button [ngClass]="filter === 'gym' ? 'active' : '' " (click)="changeFilter('gym')" >Gym</button>
+    <button [ngClass]="filter === 'book' ? 'active' : '' " (click)="changeFilter('book')">Book</button>
+    <button [ngClass]="filter === 'code' ? 'active' : '' " (click)="changeFilter('code')">Code</button>
   </div>
 </div>
