@@ -8,11 +8,13 @@
     <div *ngFor="let dayName of getDayNames()" class="calendar-head">
       {{dayName}}
     </div>
-    <div *ngFor="let day of days" class="calendar-cell">
+    <div *ngFor="let day of days" class="calendar-cell" (click)="markActivity(day, filter)">
       <div class="date">
         {{day > 0 ? day : '*'}}
       </div>
-      <div class="activity">{{getDataOfDay(day)}}</div>
+      <div class="activity" *ngFor="let event of getEventOfDay(day)">
+        <b>{{event.toUpperCase()}}</b>
+      </div>
     </div>
   </div>
   <div class="action-filter">

@@ -1,5 +1,4 @@
-import { Component, SimpleChange, SimpleChanges } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component } from '@angular/core';
 
 type DataObject  = {
     year: number,
@@ -22,68 +21,68 @@ export class CalendarComponent {
   filter : string = 'all';
   data: DataObject[] = [
     {
-      year: 2025,
-      month: 1,
-      day: 20,
-      activity: "gym",
+      year: 2024,
+      month: 11,
+      day: 1,
+      activity: "code",
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 1,
       activity: "gym"
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 2,
       activity: "code",
     },
     {
-      year: 2025,
-      month: 1,
-      day: 13,
-      activity: "gym"
+      year: 2024,
+      month: 11,
+      day: 2,
+      activity: "book"
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 30,
       activity: "gym",
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 10,
       activity: "gym"
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 16,
       activity: "gym",
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 23,
       activity: "book"
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 28,
       activity: "code"
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 17,
       activity: "code"
     },
     {
-      year: 2025,
-      month: 1,
+      year: 2024,
+      month: 11,
       day: 6,
       activity: "book"
     },
@@ -117,13 +116,13 @@ export class CalendarComponent {
   }
 
   fillDays() {
-    let maxDay = new Date(this.year, this.month + 1, 0).getDate();
-    let startIndex = new Date(this.year, this.month, 1).getDay();
+    const lastDate = new Date(this.year, this.month + 1, 0).getDate();
+    const startDay = new Date(this.year, this.month, 1).getDay();
     let dayOne = 0;
     return Array.from
     ({ length: 42 },
       (_, i) => {
-        if (dayOne !== maxDay && i >= startIndex) {
+        if (dayOne < lastDate && i >= startDay) {
           dayOne += 1;
           return dayOne;
         }
@@ -150,14 +149,10 @@ export class CalendarComponent {
     console.log(this.currentDate);
   }
 
-  getDataOfDay(day: number) {
-    let year: number = this.year;
-    let monthString: string = this.getMonthName(this.month);
-
-    // console.log(`monthString ${monthString} - type ${typeof(monthString)}`)
-    let dayData = this.filteredData?.find( val => val.year === this.year && val.month === this.month && val.day === day )
-    console.log(dayData);
-    return dayData?.activity || "";
+  getEventOfDay(day: number) {
+    const  dayDataObjectList = this.filteredData?.filter( val => val.year === this.year && val.month === this.month && val.day === day )
+    const dayData = dayDataObjectList.map( data => data.activity);
+    return dayData;
   }
 
   applyFilter() {
@@ -169,6 +164,34 @@ export class CalendarComponent {
 
   changeFilter(filter: string) {
     this.filter = filter;
+    this.applyFilter();
+  }
+
+  markActivity(date: number, markedActivity: string ) {
+    console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`)
+    if (this.filter === 'all' || date === 0)
+      return;
+
+    let updatedData: DataObject[] = [];
+    const markedIndex = this.data.findIndex( value =>
+        value.year === this.year &&
+        value.day === date &&
+        value.month === this.month &&
+        markedActivity === value.activity
+    );
+
+    console.log(markedIndex);
+
+    if (markedIndex > -1) {
+      this.data.splice(markedIndex, 1);
+      updatedData = [...this.data];
+    } else {
+      updatedData =
+      [...this.data,
+        {year: this.year, month: this.month, day: date, activity: markedActivity }
+      ];
+    }
+    this.data = updatedData;
     this.applyFilter();
   }
 
