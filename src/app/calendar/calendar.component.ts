@@ -149,7 +149,7 @@ export class CalendarComponent {
     console.log(this.currentDate);
   }
 
-  getEventOfDay(day: number) {
+  getActivityDay(day: number) {
     const  dayDataObjectList = this.filteredData?.filter( val => val.year === this.year && val.month === this.month && val.day === day )
     const dayData = dayDataObjectList.map( data => data.activity);
     return dayData;

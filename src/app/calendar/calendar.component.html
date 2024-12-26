@@ -12,7 +12,7 @@
       <div class="date">
         {{day > 0 ? day : '*'}}
       </div>
-      <div class="activity" *ngFor="let event of getEventOfDay(day)">
+      <div class="activity" *ngFor="let event of getActivityDay(day)">
         <b>{{event.toUpperCase()}}</b>
       </div>
     </div>
