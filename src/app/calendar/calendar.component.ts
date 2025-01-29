@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { CheckMarksService } from '../check-marks.service';
+import { CheckMark } from '../models/check-mark/checkMark.model';
 
 type DataObject  = {
+    id: number,
     year: number,
     month: number,
     day: number,
@@ -19,83 +22,84 @@ export class CalendarComponent {
   month: number = this.currentDate.getMonth();
   year: number = this.currentDate.getFullYear();
   filter : string = 'all';
-  data: DataObject[] = [
-    {
-      year: 2024,
-      month: 11,
-      day: 1,
-      activity: "code",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 1,
-      activity: "gym"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 2,
-      activity: "code",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 2,
-      activity: "book"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 30,
-      activity: "gym",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 10,
-      activity: "gym"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 16,
-      activity: "gym",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 23,
-      activity: "book"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 28,
-      activity: "code"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 17,
-      activity: "code"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 6,
-      activity: "book"
-    },
-  ];
+  // data: DataObject[] = [
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 1,
+  //     activity: "code",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 1,
+  //     activity: "gym"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 2,
+  //     activity: "code",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 2,
+  //     activity: "book"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 30,
+  //     activity: "gym",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 10,
+  //     activity: "gym"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 16,
+  //     activity: "gym",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 23,
+  //     activity: "book"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 28,
+  //     activity: "code"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 17,
+  //     activity: "code"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 6,
+  //     activity: "book"
+  //   },
+  // ];
+  data: DataObject[] = [];
 
   filteredData: DataObject[] = [];
 
-  constructor() {
+  constructor( private checkMarkService: CheckMarksService) {
     this.days = this.fillDays();
   }
 
   ngOnInit() {
-    console.info(this.currentDate);
+    this.getAllMarks();
     this.applyFilter();
   }
 
@@ -169,30 +173,28 @@ export class CalendarComponent {
 
   markActivity(date: number, markedActivity: string ) {
     console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`)
-    if (this.filter === 'all' || date === 0)
-      return;
 
-    let updatedData: DataObject[] = [];
-    const markedIndex = this.data.findIndex( value =>
-        value.year === this.year &&
-        value.day === date &&
-        value.month === this.month &&
-        markedActivity === value.activity
-    );
-
-    console.log(markedIndex);
-
-    if (markedIndex > -1) {
-      this.data.splice(markedIndex, 1);
-      updatedData = [...this.data];
-    } else {
-      updatedData =
-      [...this.data,
-        {year: this.year, month: this.month, day: date, activity: markedActivity }
-      ];
-    }
-    this.data = updatedData;
     this.applyFilter();
+  }
+
+  async getAllMarks () {
+    const allCheckMarks = await this.checkMarkService.getAllCheckMarks();
+    if (allCheckMarks) {
+      const listOfMarks : DataObject[] = [];
+      for ( let checkMark of allCheckMarks ) {
+        const date = new Date(checkMark.date);
+        listOfMarks.push({
+          id: checkMark.id,
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          day: date.getDate(),
+          activity: checkMark.activity
+        });
+      }
+      this.data = listOfMarks;
+    } else {
+      alert("error retrieving data!!")
+    }
   }
 
 }

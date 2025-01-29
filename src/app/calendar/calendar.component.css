@@ -28,11 +28,11 @@
   height: 100%;
   grid-area: calendar;
   display: grid;
-  gap: 2px;
+  gap: 6px;
   grid-template-columns: repeat(7, auto);
-  grid-template-rows: 50px repeat(5, 1fr);
+  grid-template-rows: 50px repeat(6, 1fr);
   margin: 20px 0px 0px 100px;
-  border: 3px solid rgb(5, 17, 240);
+  /* border: 3px solid rgb(5, 17, 240); */
 }
 
 .action-filter {
@@ -45,9 +45,9 @@
 
 .calendar-head {
   text-align: center;
-  border: 1px solid rgb(245, 2, 2);
-  box-shadow: 3px 3px 3px rgb(232, 147, 147) ;
-
+  /* border: 1px solid rgb(245, 2, 2); */
+  box-shadow: 3px 3px 3px rgb(80, 125, 85) ;
+  border: 1px solid rgb(216, 213, 213);
 }
 
 .calendar-cell {
@@ -57,7 +57,8 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  box-shadow: 3px 3px 3px gray ;
+  box-shadow: 3px 3px 3px rgb(7, 6, 6) ;
+  border: 1px solid rgb(216, 213, 213);
   position: relative;
   overflow: hidden;
 }
