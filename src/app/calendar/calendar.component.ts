@@ -171,14 +171,17 @@ export class CalendarComponent {
     this.applyFilter();
   }
 
-  markActivity(date: number, markedActivity: string ) {
-    console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`)
+  async markActivity(date: number, markedActivity: string ) {
+    console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`);
+    const markDate: Date = new Date(date, this.month, this.year);
 
+    const response: boolean = await this.checkMarkService.addCheckMark(markDate, markedActivity);
     this.applyFilter();
   }
 
   async getAllMarks () {
     const allCheckMarks = await this.checkMarkService.getAllCheckMarks();
+    console.log(allCheckMarks);
     if (allCheckMarks) {
       const listOfMarks : DataObject[] = [];
       for ( let checkMark of allCheckMarks ) {
