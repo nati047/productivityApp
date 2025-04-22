@@ -98,8 +98,8 @@ export class CalendarComponent {
     this.days = this.fillDays();
   }
 
-  ngOnInit() {
-    this.getAllMarks();
+  async ngOnInit() {
+    await this.getAllMarks();
     this.applyFilter();
   }
 
@@ -173,15 +173,13 @@ export class CalendarComponent {
 
   async markActivity(date: number, markedActivity: string ) {
     console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`);
-    const markDate: Date = new Date(date, this.month, this.year);
-
+    const markDate: Date = new Date(this.year, this.month, date);
     const response: boolean = await this.checkMarkService.addCheckMark(markDate, markedActivity);
     this.applyFilter();
   }
 
   async getAllMarks () {
     const allCheckMarks = await this.checkMarkService.getAllCheckMarks();
-    console.log(allCheckMarks);
     if (allCheckMarks) {
       const listOfMarks : DataObject[] = [];
       for ( let checkMark of allCheckMarks ) {
@@ -195,6 +193,7 @@ export class CalendarComponent {
         });
       }
       this.data = listOfMarks;
+      console.log(this.data);
     } else {
       alert("error retrieving data!!")
     }
