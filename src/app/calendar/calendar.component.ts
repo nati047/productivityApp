@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { CheckMarksService } from '../check-marks.service';
+import { CheckMark } from '../models/check-mark/checkMark.model';
 
 type DataObject  = {
+    id: number,
     year: number,
     month: number,
     day: number,
@@ -19,83 +22,84 @@ export class CalendarComponent {
   month: number = this.currentDate.getMonth();
   year: number = this.currentDate.getFullYear();
   filter : string = 'all';
-  data: DataObject[] = [
-    {
-      year: 2024,
-      month: 11,
-      day: 1,
-      activity: "code",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 1,
-      activity: "gym"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 2,
-      activity: "code",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 2,
-      activity: "book"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 30,
-      activity: "gym",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 10,
-      activity: "gym"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 16,
-      activity: "gym",
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 23,
-      activity: "book"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 28,
-      activity: "code"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 17,
-      activity: "code"
-    },
-    {
-      year: 2024,
-      month: 11,
-      day: 6,
-      activity: "book"
-    },
-  ];
+  // data: DataObject[] = [
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 1,
+  //     activity: "code",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 1,
+  //     activity: "gym"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 2,
+  //     activity: "code",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 2,
+  //     activity: "book"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 30,
+  //     activity: "gym",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 10,
+  //     activity: "gym"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 16,
+  //     activity: "gym",
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 23,
+  //     activity: "book"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 28,
+  //     activity: "code"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 17,
+  //     activity: "code"
+  //   },
+  //   {
+  //     year: 2024,
+  //     month: 11,
+  //     day: 6,
+  //     activity: "book"
+  //   },
+  // ];
+  data: DataObject[] = [];
 
   filteredData: DataObject[] = [];
 
-  constructor() {
+  constructor( private checkMarkService: CheckMarksService) {
     this.days = this.fillDays();
   }
 
-  ngOnInit() {
-    console.info(this.currentDate);
+  async ngOnInit() {
+    await this.getAllMarks();
     this.applyFilter();
   }
 
@@ -149,7 +153,7 @@ export class CalendarComponent {
     console.log(this.currentDate);
   }
 
-  getEventOfDay(day: number) {
+  getActivityDay(day: number) {
     const  dayDataObjectList = this.filteredData?.filter( val => val.year === this.year && val.month === this.month && val.day === day )
     const dayData = dayDataObjectList.map( data => data.activity);
     return dayData;
@@ -167,32 +171,36 @@ export class CalendarComponent {
     this.applyFilter();
   }
 
-  markActivity(date: number, markedActivity: string ) {
-    console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`)
-    if (this.filter === 'all' || date === 0)
+  async markActivity(date: number, markedActivity: string ) {
+    if (markedActivity === 'all') {
       return;
-
-    let updatedData: DataObject[] = [];
-    const markedIndex = this.data.findIndex( value =>
-        value.year === this.year &&
-        value.day === date &&
-        value.month === this.month &&
-        markedActivity === value.activity
-    );
-
-    console.log(markedIndex);
-
-    if (markedIndex > -1) {
-      this.data.splice(markedIndex, 1);
-      updatedData = [...this.data];
-    } else {
-      updatedData =
-      [...this.data,
-        {year: this.year, month: this.month, day: date, activity: markedActivity }
-      ];
     }
-    this.data = updatedData;
+    console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`);
+    const markDate: Date = new Date(this.year, this.month, date);
+    const response: boolean = await this.checkMarkService.addCheckMark(markDate, markedActivity);
+    await this.getAllMarks();
     this.applyFilter();
+    console.log(this.data);
+  }
+
+  async getAllMarks () {
+    const allCheckMarks = await this.checkMarkService.getAllCheckMarks();
+    if (allCheckMarks) {
+      const listOfMarks : DataObject[] = [];
+      for ( let checkMark of allCheckMarks ) {
+        const date = new Date(checkMark.date);
+        listOfMarks.push({
+          id: checkMark.id,
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          day: date.getDate(),
+          activity: checkMark.activity
+        });
+      }
+      this.data = listOfMarks;
+    } else {
+      alert("No data found!");
+    }
   }
 
 }
