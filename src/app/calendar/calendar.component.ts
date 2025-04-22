@@ -172,10 +172,15 @@ export class CalendarComponent {
   }
 
   async markActivity(date: number, markedActivity: string ) {
+    if (markedActivity === 'all') {
+      return;
+    }
     console.info(`mark activity called - date ${date} markedActivity - ${markedActivity}`);
     const markDate: Date = new Date(this.year, this.month, date);
     const response: boolean = await this.checkMarkService.addCheckMark(markDate, markedActivity);
+    await this.getAllMarks();
     this.applyFilter();
+    console.log(this.data);
   }
 
   async getAllMarks () {
@@ -193,9 +198,8 @@ export class CalendarComponent {
         });
       }
       this.data = listOfMarks;
-      console.log(this.data);
     } else {
-      alert("error retrieving data!!")
+      alert("No data found!");
     }
   }
 
