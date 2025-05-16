@@ -1,7 +1,7 @@
 .cal-component {
   /* max-width: 100vw; */
   height: 88%;
-  /* border: 2px solid yellow; */
+  /* border: 10px solid yellow; */
   display: grid;
   grid-template-columns: 10fr 2fr;
   grid-template-rows: 10vh 11fr;
@@ -36,6 +36,7 @@
 }
 
 .action-filter {
+  /* border: 3px solid rgb(5, 17, 240); */
   grid-area: filter;
   display: flex;
   flex-direction: column;
